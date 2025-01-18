@@ -1,95 +1,240 @@
 <html lang="en">
- <head>
+<head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Music Player</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"/>
-  <link rel="shortcut icon" href="https://scontent.fmnl8-4.fna.fbcdn.net/v/t39.30808-6/473732642_122116290140684078_3400837556738821946_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_ohc=rylL70KIM80Q7kNvgHOdR3o&_nc_zt=23&_nc_ht=scontent.fmnl8-4.fna&_nc_gid=AgzOOXD0NJgHHTfZUYhFB6Z&oh=00_AYBzLyPaNf-54Q70Gly_-9DxexA8B-k7BoLpUjWQY4-vdg&oe=67910BB3" type="image/x-icon" >
-   <style>body{font-family:'Open Sans',sans-serif;}</style>
- </head>
- <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+  <link rel="shortcut icon" href="https://scontent.fmnl8-4.fna.fbcdn.net/v/t39.30808-6/473732642_122116290140684078_3400837556738821946_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_ohc=rylL70KIM80Q7kNvgHOdR3o&_nc_zt=23&_nc_ht=scontent.fmnl8-4.fna&_nc_gid=AgzOOXD0NJgHHTfZUYhFB6Z&oh=00_AYBzLyPaNf-54Q70Gly_-9DxexA8B-k7BoLpUjWQY4-vdg&oe=67910BB3" type="image/x-icon">
+  <style>body{font-family:'Open Sans',sans-serif;}</style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
   <div class="w-full max-w-sm p-6 bg-gray-800 rounded-lg shadow-lg">
-   <div class="flex items-center justify-between mb-4">
-    <h1 class="text-2xl font-bold">Music Player</h1>
-    <div class="flex items-center space-x-4">
-     <div class="relative">
-      <i class="fas fa-music text-2xl cursor-pointer" id="musicIcon"></i>
-      <div class="absolute right-0 mt-2 w-48 bg-gray-700 rounded-lg shadow-lg hidden" id="musicList">
-       <ul id="savedMusicList">
-        <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Song 1</li>
-        <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Song 2</li>
-        <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Song 3</li>
-        <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Song 4</li>
-        <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">Song 5</li>
-        <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3">Song 6</li>
-        <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">Song 7</li>
-        <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">Song 8</li>
-        <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3">Song 9</li>
-        <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3">Song 10</li>
-       </ul>
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-2xl font-bold">Music Player</h1>
+      <div class="flex items-center space-x-4">
+        <div class="relative">
+          <i class="fas fa-music text-2xl cursor-pointer" id="musicIcon"></i>
+          <div class="absolute right-0 mt-2 w-48 bg-gray-700 rounded-lg shadow-lg hidden" id="musicList">
+            <ul id="savedMusicList">
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Song 1</li>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Song 2</li>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Song 3</li>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">Song 4</li>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3">Song 5</li>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3">Song 6</li>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">Song 7</li>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3">Song 8</li>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3">Song 9</li>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3">Song 10</li>
+            </ul>
+          </div>
+        </div>
+        <div class="relative">
+          <i class="fas fa-folder-open text-2xl cursor-pointer" id="filesIcon"></i>
+          <input accept="audio/*" class="absolute inset-0 opacity-0 cursor-pointer" id="fileInput" type="file"/>
+        </div>
+        <div class="relative">
+          <i class="fas fa-cog text-2xl cursor-pointer" id="settingsIcon"></i>
+          <div class="absolute right-0 mt-2 w-48 bg-gray-700 rounded-lg shadow-lg hidden" id="settingsMenu">
+            <ul>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" id="themeToggle">Toggle Theme</li>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" id="downloadMp4">Download MP4</li>
+              <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" id="convertMp3">Convert MP4 to MP3</li>
+            </ul>
+          </div>
+        </div>
       </div>
-     </div>
-     <div class="relative">
-      <i class="fas fa-folder-open text-2xl cursor-pointer" id="filesIcon"></i>
-      <input accept="audio/*" class="absolute inset-0 opacity-0 cursor-pointer" id="fileInput" type="file"/>
-     </div>
-     <div class="relative">
-      <i class="fas fa-cog text-2xl cursor-pointer" id="settingsIcon"></i>
-      <div class="absolute right-0 mt-2 w-48 bg-gray-700 rounded-lg shadow-lg hidden" id="settingsMenu">
-       <ul>
-        <li class="px-4 py-2 hover:bg-gray-600 cursor-pointer" id="themeToggle">Toggle Theme</li>
-       </ul>
+    </div>
+    <div class="mb-4">
+      <img alt="Album cover with abstract art" class="w-full h-64 object-cover rounded-lg" height="300" src="https://storage.googleapis.com/a1aa/image/E3A3qKHihRnmtXGQQyPcLNDN5aIhrrlkJ04NS2K2ebM.jpg" width="300"/>
+    </div>
+    <div class="flex items-center justify-between mb-4">
+      <button class="text-3xl text-blue-500" id="playPauseBtn"><i class="fas fa-play"></i></button>
+      <div class="flex-1 mx-4">
+        <input class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" id="progressBar" type="range"/>
       </div>
-     </div>
+      <span class="text-sm" id="currentTime">0:00</span>
+      <span class="text-sm" id="duration">0:00</span>
     </div>
-   </div>
-   <div class="mb-4">
-    <img alt="Album cover with abstract art" class="w-full h-64 object-cover rounded-lg" height="300" src="https://storage.googleapis.com/a1aa/image/E3A3qKHihRnmtXGQQyPcLNDN5aIhrrlkJ04NS2K2ebM.jpg" width="300"/>
-   </div>
-   <div class="flex items-center justify-between mb-4">
-    <button class="text-3xl text-blue-500" id="playPauseBtn"><i class="fas fa-play"></i></button>
-    <div class="flex-1 mx-4">
-     <input class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" id="progressBar" type="range"/>
+    <div class="flex items-center justify-between">
+      <i class="fas fa-volume-down"></i>
+      <input class="w-full mx-4 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" id="volumeControl" type="range"/>
+      <i class="fas fa-volume-up"></i>
     </div>
-    <span class="text-sm" id="currentTime">0:00</span>
-    <span class="text-sm" id="duration">0:00</span>
-   </div>
-   <div class="flex items-center justify-between">
-    <i class="fas fa-volume-down"></i>
-    <input class="w-full mx-4 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" id="volumeControl" type="range"/>
-    <i class="fas fa-volume-up"></i>
-   </div>
-   <div class="mt-4">
-    <button class="w-full py-2 bg-blue-600 rounded-lg hover:bg-blue-700" id="saveMusicBtn">Save Music</button>
-   </div>
-   <div class="mt-4 flex justify-center space-x-4">
-    <a href="https://www.facebook.com/profile.php?id=100094065825117&rdid=pV5kOa9ukPxa28qB&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F12J2WnKPHwe%2F#" class="text-blue-500 hover:text-blue-700"><i class="fab fa-facebook-square text-2xl"></i></a>
-    <a href="#" class="text-blue-400 hover:text-blue-600"><i class="fab fa-twitter-square text-2xl"></i></a>
-    <a href="#" class="text-pink-500 hover:text-pink-700"><i class="fab fa-instagram-square text-2xl"></i></a>
-    <a href="#" class="text-red-500 hover:text-red-700"><i class="fab fa-youtube-square text-2xl"></i></a>
-   </div>
+    <div class="mt-4">
+      <button class="w-full py-2 bg-blue-600 rounded-lg hover:bg-blue-700" id="saveMusicBtn">Save Music</button>
+    </div>
+    <div class="mt-4 flex justify-center space-x-4">
+      <a href="https://www.facebook.com/profile.php?id=100094065825117&rdid=pV5kOa9ukPxa28qB&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F12J2WnKPHwe%2F#" class="text-blue-500 hover:text-blue-700"><i class="fab fa-facebook-square text-2xl"></i></a>
+      <a href="#" class="text-blue-400 hover:text-blue-600"><i class="fab fa-twitter-square text-2xl"></i></a>
+      <a href="#" class="text-pink-500 hover:text-pink-700"><i class="fab fa-instagram-square text-2xl"></i></a>
+      <a href="#" class="text-red-500 hover:text-red-700"><i class="fab fa-youtube-square text-2xl"></i></a>
+    </div>
   </div>
   <audio id="audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
   <script type="module">
-   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-   const firebaseConfig={apiKey:"AIzaSyCCWxnDdM7gnh57wihSnrxxdDU8YWM0l9s",authDomain:"message-vo3qyn.firebaseapp.com",databaseURL:"https://message-vo3qyn-default-rtdb.firebaseio.com",projectId:"message-vo3qyn",storageBucket:"message-vo3qyn.firebasestorage.app",messagingSenderId:"600735349605",appId:"1:600735349605:web:8cd0265be5a373a917bf8c"};
-   const app=initializeApp(firebaseConfig);
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyCCWxnDdM7gnh57wihSnrxxdDU8YWM0l9s",
+      authDomain: "message-vo3qyn.firebaseapp.com",
+      databaseURL: "https://message-vo3qyn-default-rtdb.firebaseio.com",
+      projectId: "message-vo3qyn",
+      storageBucket: "message-vo3qyn.firebasestorage.app",
+      messagingSenderId: "600735349605",
+      appId: "1:600735349605:web:8cd0265be5a373a917bf8c"
+    };
+    const app = initializeApp(firebaseConfig);
   </script>
   <script>
-   const audio=document.getElementById('audio');const playPauseBtn=document.getElementById('playPauseBtn');const progressBar=document.getElementById('progressBar');const currentTimeEl=document.getElementById('currentTime');const durationEl=document.getElementById('duration');const volumeControl=document.getElementById('volumeControl');const musicIcon=document.getElementById('musicIcon');const musicList=document.getElementById('musicList');const fileInput=document.getElementById('fileInput');const saveMusicBtn=document.getElementById('saveMusicBtn');const savedMusicList=document.getElementById('savedMusicList');const settingsIcon=document.getElementById('settingsIcon');const settingsMenu=document.getElementById('settingsMenu');const themeToggle=document.getElementById('themeToggle');let savedMusic=JSON.parse(localStorage.getItem('savedMusic'))||[];function renderSavedMusic(){savedMusicList.innerHTML='';savedMusic.forEach((music,index)=>{const li=document.createElement('li');li.className='px-4 py-2 hover:bg-gray-600 cursor-pointer';li.textContent=music.name;li.setAttribute('data-src',music.src);li.addEventListener('contextmenu',(e)=>{e.preventDefault();if(confirm(`Do you want to delete ${music.name}?`)){savedMusic.splice(index,1);localStorage.setItem('savedMusic',JSON.stringify(savedMusic));renderSavedMusic();}});savedMusicList.appendChild(li);});}renderSavedMusic();playPauseBtn.addEventListener('click',()=>{if(audio.paused){audio.play();playPauseBtn.innerHTML='<i class="fas fa-pause"></i>';}else{audio.pause();playPauseBtn.innerHTML='<i class="fas fa-play"></i>';}});audio.addEventListener('timeupdate',()=>{const currentTime=audio.currentTime;const duration=audio.duration;progressBar.value=(currentTime/duration)*100;currentTimeEl.textContent=formatTime(currentTime);durationEl.textContent=formatTime(duration);});progressBar.addEventListener('input',()=>{const duration=audio.duration;audio.currentTime=(progressBar.value/100)*duration;});volumeControl.addEventListener('input',()=>{audio.volume=volumeControl.value/100;});musicIcon.addEventListener('click',()=>{musicList.classList.toggle('hidden');});musicList.addEventListener('click',(e)=>{if(e.target.tagName==='LI'){const songSrc=e.target.getAttribute('data-src');audio.src=songSrc;audio.play();playPauseBtn.innerHTML='<i class="fas fa-pause"></i>';musicList.classList.add('hidden');}});fileInput.addEventListener('change',(e)=>{const file=e.target.files[0];if(file){const fileURL=URL.createObjectURL(file);audio.src=fileURL;audio.play();playPauseBtn.innerHTML='<i class="fas fa-pause"></i>';}});saveMusicBtn.addEventListener('click',()=>{const currentSrc=audio.src;const musicName=prompt('Enter a name for this music:');if(musicName){savedMusic.push({name:musicName,src:currentSrc});localStorage.setItem('savedMusic',JSON.stringify(savedMusic));renderSavedMusic();}});settingsIcon.addEventListener('click',()=>{settingsMenu.classList.toggle('hidden');});themeToggle.addEventListener('click',()=>{document.body.classList.toggle('bg-gray-900');document.body.classList.toggle('bg-white');document.body.classList.toggle('text-black');document.body.classList.toggle('text-white');settingsMenu.classList.add('hidden');});function formatTime(seconds){const minutes=Math.floor(seconds/60);const secs=Math.floor(seconds%60);return`${minutes}:${secs<10?'0':''}${secs}`;}
+    const audio = document.getElementById('audio');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const progressBar = document.getElementById('progressBar');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('duration');
+    const volumeControl = document.getElementById('volumeControl');
+    const musicIcon = document.getElementById('musicIcon');
+    const musicList = document.getElementById('musicList');
+    const fileInput = document.getElementById('fileInput');
+    const saveMusicBtn = document.getElementById('saveMusicBtn');
+    const savedMusicList = document.getElementById('savedMusicList');
+    const settingsIcon = document.getElementById('settingsIcon');
+    const settingsMenu = document.getElementById('settingsMenu');
+    const themeToggle = document.getElementById('themeToggle');
+    const downloadMp4 = document.getElementById('downloadMp4');
+    const convertMp3 = document.getElementById('convertMp3');
+    let savedMusic = JSON.parse(localStorage.getItem('savedMusic')) || [];
+
+    function renderSavedMusic() {
+      savedMusicList.innerHTML = '';
+      savedMusic.forEach((music, index) => {
+        const li = document.createElement('li');
+        li.className = 'px-4 py-2 hover:bg-gray-600 cursor-pointer';
+        li.textContent = music.name;
+        li.setAttribute('data-src', music.src);
+        li.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+          if (confirm(`Do you want to delete ${music.name}?`)) {
+            savedMusic.splice(index, 1);
+            localStorage.setItem('savedMusic', JSON.stringify(savedMusic));
+            renderSavedMusic();
+          }
+        });
+        savedMusicList.appendChild(li);
+      });
+    }
+
+    renderSavedMusic();
+
+    playPauseBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      } else {
+        audio.pause();
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+      }
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      const currentTime = audio.currentTime;
+      const duration = audio.duration;
+      progressBar.value = (currentTime / duration) * 100;
+      currentTimeEl.textContent = formatTime(currentTime);
+      durationEl.textContent = formatTime(duration);
+    });
+
+    progressBar.addEventListener('input', () => {
+      const duration = audio.duration;
+      audio.currentTime = (progressBar.value / 100) * duration;
+    });
+
+    volumeControl.addEventListener('input', () => {
+      audio.volume = volumeControl.value / 100;
+    });
+
+    musicIcon.addEventListener('click', () => {
+      musicList.classList.toggle('hidden');
+    });
+
+    musicList.addEventListener('click', (e) => {
+      if (e.target.tagName === 'LI') {
+        const songSrc = e.target.getAttribute('data-src');
+        audio.src = songSrc;
+        audio.play();
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        musicList.classList.add('hidden');
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const fileURL = URL.createObjectURL(file);
+        audio.src = fileURL;
+        audio.play();
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      }
+    });
+
+    saveMusicBtn.addEventListener('click', () => {
+      const currentSrc = audio.src;
+      const musicName = prompt('Enter a name for this music:');
+      if (musicName) {
+        savedMusic.push({ name: musicName, src: currentSrc });
+        localStorage.setItem('savedMusic', JSON.stringify(savedMusic));
+        renderSavedMusic();
+      }
+    });
+
+    settingsIcon.addEventListener('click', () => {
+      settingsMenu.classList.toggle('hidden');
+    });
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('bg-gray-900');
+      document.body.classList.toggle('bg-white');
+      document.body.classList.toggle('text-black');
+      document.body.classList.toggle('text-white');
+      settingsMenu.classList.add('hidden');
+    });
+
+    downloadMp4.addEventListener('click', () => {
+      const url = prompt('Enter the URL of the MP4 file:');
+      if (url) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'video.mp4';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    });
+
+    convertMp3.addEventListener('click', () => {
+      const url = prompt('Enter the URL of the MP4 file to convert:');
+      if (url) {
+        alert('This feature is not implemented yet.');
+      }
+    });
+
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    }
   </script>
   <script>
-   if ('serviceWorker' in navigator) {
-     window.addEventListener('load', function() {
-       navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-         console.log('ServiceWorker registration successful with scope: ', registration.scope);
-       }, function(err) {
-         console.log('ServiceWorker registration failed: ', err);
-       });
-     });
-   }
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
   </script>
- </body>
+</body>
 </html>
