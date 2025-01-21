@@ -1,0 +1,60 @@
+<html>
+ <head>
+  <title>
+   Upload Photo and Convert to URL
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+            font-family: 'Roboto', sans-serif;
+        }
+  </style>
+ </head>
+ <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+   <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">
+    Upload Photo
+   </h2>
+   <div class="mb-4">
+    <label class="block text-gray-700 font-medium mb-2" for="fileInput">
+     Select an image:
+    </label>
+    <input accept="image/*" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" id="fileInput" type="file"/>
+   </div>
+   <button class="bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 w-full font-medium" id="uploadButton">
+    Upload
+   </button>
+   <div class="mt-6 hidden" id="result">
+    <h3 class="text-xl font-semibold mb-4 text-gray-800">
+     Uploaded Image:
+    </h3>
+    <img alt="Preview of the uploaded image" class="w-full h-auto mb-4 rounded-lg shadow-md" height="400" id="uploadedImage" src="https://storage.googleapis.com/a1aa/image/X1848yO9rG6CG9kWEU49BJXCKTq6RRcR8Upyv58S6uJMY0BF.jpg" width="600"/>
+    <h3 class="text-xl font-semibold mb-2 text-gray-800">
+     Image URL:
+    </h3>
+    <input class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" id="imageUrl" readonly="" type="text"/>
+   </div>
+  </div>
+  <script>
+   document.getElementById('uploadButton').addEventListener('click', function() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageUrl = e.target.result;
+                    document.getElementById('uploadedImage').src = imageUrl;
+                    document.getElementById('imageUrl').value = imageUrl;
+                    document.getElementById('result').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please select a file to upload.');
+            }
+        });
+  </script>
+ </body>
+</html>
