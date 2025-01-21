@@ -1,0 +1,421 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Chat App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, set, onDisconnect, remove, update, goOffline, goOnline } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-messaging.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCCWxnDdM7gnh57wihSnrxxdDU8YWM0l9s",
+            authDomain: "message-vo3qyn.firebaseapp.com",
+            databaseURL: "https://message-vo3qyn-default-rtdb.firebaseio.com",
+            projectId: "message-vo3qyn",
+            storageBucket: "message-vo3qyn.firebasestorage.app",
+            messagingSenderId: "600735349605",
+            appId: "1:600735349605:web:8cd0265be5a373a917bf8c"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const messaging = getMessaging(app);
+
+        // Request permission to send notifications
+        Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+                console.log('Notification permission granted.');
+                getToken(messaging, { vapidKey: 'YOUR_PUBLIC_VAPID_KEY' }).then((currentToken) => {
+                    if (currentToken) {
+                        console.log('FCM Token:', currentToken);
+                    } else {
+                        console.log('No registration token available. Request permission to generate one.');
+                    }
+                }).catch((err) => {
+                    console.log('An error occurred while retrieving token. ', err);
+                });
+            } else {
+                console.log('Unable to get permission to notify.');
+            }
+        });
+
+        // Handle incoming messages
+        onMessage(messaging, (payload) => {
+            console.log('Message received. ', payload);
+            const notificationTitle = payload.notification.title;
+            const notificationOptions = {
+                body: payload.notification.body,
+                icon: payload.notification.icon
+            };
+
+            new Notification(notificationTitle, notificationOptions);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const messageList = document.getElementById('message-list');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const typingIndicator = document.getElementById('typing-indicator');
+            const uploadButton = document.getElementById('upload-button');
+            const fileInput = document.getElementById('file-input');
+            const fullScreenModal = document.getElementById('full-screen-modal');
+            const fullScreenImage = document.getElementById('full-screen-image');
+            const closeFullScreenButton = document.getElementById('close-full-screen-button');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const closeSidebarButton = document.getElementById('close-sidebar-button');
+            const emojiPicker = document.getElementById('emoji-picker');
+            const userPhotoInput = document.getElementById('user-photo-input');
+            const userPhoto = document.getElementById('user-photo');
+            const userNameInput = document.getElementById('user-name-input');
+            const saveUserNameButton = document.getElementById('save-user-name-button');
+            const themeToggle = document.getElementById('theme-toggle');
+
+            let userName = localStorage.getItem('userName') || 'user1'; // Default user name
+            let userPhotoURL = localStorage.getItem('userPhotoURL') || 'https://placehold.co/50x50';
+            let messageToDelete = null;
+            let typingMessage = localStorage.getItem('typingMessage') || 'is typing...';
+            let offlineMessages = JSON.parse(localStorage.getItem('offlineMessages')) || [];
+            let theme = localStorage.getItem('theme') || 'light';
+
+            userNameInput.value = userName;
+            userPhoto.src = userPhotoURL;
+            document.body.classList.toggle('dark', theme === 'dark');
+
+            messageInput.addEventListener('input', () => {
+                if (messageInput.value.trim() !== '') {
+                    set(ref(db, `typing/${userName}`), true);
+                } else {
+                    set(ref(db, `typing/${userName}`), false);
+                }
+            });
+
+            sendButton.addEventListener('click', () => {
+                const message = messageInput.value;
+                if (message.trim() !== '') {
+                    const messageData = {
+                        text: message,
+                        timestamp: Date.now(),
+                        sender: userName,
+                        photoURL: userPhotoURL,
+                        isImage: false,
+                        read: false
+                    };
+
+                    if (navigator.onLine) {
+                        push(ref(db, 'messages'), messageData);
+                    } else {
+                        offlineMessages.push(messageData);
+                        localStorage.setItem('offlineMessages', JSON.stringify(offlineMessages));
+                    }
+
+                    messageInput.value = '';
+                    set(ref(db, `typing/${userName}`), false);
+                    messageList.scrollTop = messageList.scrollHeight; // Auto-scroll to the bottom
+                }
+            });
+
+            uploadButton.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const messageData = {
+                            text: `<img src="${e.target.result}" alt="Uploaded image by ${userName}" class="max-w-full h-auto cursor-pointer">`,
+                            timestamp: Date.now(),
+                            sender: userName,
+                            photoURL: userPhotoURL,
+                            isImage: true,
+                            read: false
+                        };
+
+                        if (navigator.onLine) {
+                            push(ref(db, 'messages'), messageData);
+                        } else {
+                            offlineMessages.push(messageData);
+                            localStorage.setItem('offlineMessages', JSON.stringify(offlineMessages));
+                        }
+
+                        messageList.scrollTop = messageList.scrollHeight; // Auto-scroll to the bottom
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            userPhotoInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        userPhoto.src = e.target.result;
+                        userPhotoURL = e.target.result;
+                        localStorage.setItem('userPhotoURL', userPhotoURL);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            saveUserNameButton.addEventListener('click', () => {
+                userName = userNameInput.value.trim() || 'user1';
+                localStorage.setItem('userName', userName);
+                alert('User name saved!');
+            });
+
+            themeToggle.addEventListener('change', (e) => {
+                theme = e.target.value;
+                localStorage.setItem('theme', theme);
+                document.body.classList.toggle('dark', theme === 'dark');
+            });
+
+            onValue(ref(db, 'messages'), (snapshot) => {
+                messageList.innerHTML = '';
+                snapshot.forEach((childSnapshot) => {
+                    const messageData = childSnapshot.val();
+                    const messageTime = new Date(messageData.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const isUser = messageData.sender === userName;
+                    const messageElement = document.createElement('div');
+                    messageElement.className = `flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`;
+                    messageElement.innerHTML = `
+                        <div class="flex items-start ${isUser ? 'flex-row-reverse' : ''} max-w-full">
+                            <img src="${messageData.photoURL}" alt="Profile photo of ${messageData.sender}" class="w-10 h-10 rounded-full mr-2">
+                            <div class="${isUser ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'} p-3 rounded-lg max-w-xs md:max-w-md lg:max-w-lg break-words" data-id="${childSnapshot.key}" data-is-image="${messageData.isImage}">
+                                <div class="font-bold">${messageData.sender}</div>
+                                <div>${messageData.text}</div>
+                                <div class="text-xs text-right mt-1">${messageTime}</div>
+                                <div class="sent-icon text-xs text-right mt-1">${isUser ? (messageData.read ? '<i class="fas fa-check-double"></i>' : '<i class="fas fa-check"></i>') : ''}</div>
+                                <div class="flex justify-end mt-2">
+                                    <button class="emoji-button" data-id="${childSnapshot.key}"><i class="far fa-smile"></i></button>
+                                </div>
+                                <div class="emoji-reactions mt-2"></div>
+                            </div>
+                        </div>
+                    `;
+                    messageElement.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        if (!messageData.isImage) {
+                            messageToDelete = childSnapshot.key;
+                            deleteModal.classList.remove('hidden');
+                        }
+                    });
+                    messageElement.querySelectorAll('img').forEach(img => {
+                        img.addEventListener('click', () => {
+                            // Only open image if it has been read
+                            if (messageData.read) {
+                                fullScreenImage.src = img.src;
+                                fullScreenModal.classList.remove('hidden');
+                            } else {
+                                alert('Cannot open image until it has been read.');
+                            }
+                        });
+                    });
+                    messageElement.querySelector('.emoji-button').addEventListener('click', (e) => {
+                        const messageId = e.currentTarget.getAttribute('data-id');
+                        emojiPicker.classList.remove('hidden');
+                        emojiPicker.setAttribute('data-id', messageId);
+                    });
+                    messageList.appendChild(messageElement);
+
+                    // Mark message as read
+                    if (!isUser && !messageData.read) {
+                        update(ref(db, `messages/${childSnapshot.key}`), { read: true });
+                    }
+
+                    // Display emoji reactions
+                    if (messageData.reactions) {
+                        const emojiReactions = messageElement.querySelector('.emoji-reactions');
+                        emojiReactions.innerHTML = '';
+                        for (const [emoji, users] of Object.entries(messageData.reactions)) {
+                            const reactionElement = document.createElement('span');
+                            reactionElement.textContent = `${emoji} ${users.length}`;
+                            reactionElement.classList.add('cursor-pointer');
+                            reactionElement.addEventListener('click', () => {
+                                alert(`Reactions by: ${users.join(', ')}`);
+                            });
+                            emojiReactions.appendChild(reactionElement);
+                        }
+                    }
+                });
+                messageList.scrollTop = messageList.scrollHeight; // Auto-scroll to the bottom
+            });
+
+            onValue(ref(db, 'typing'), (snapshot) => {
+                let typingUsers = [];
+                snapshot.forEach((childSnapshot) => {
+                    if (childSnapshot.val() && childSnapshot.key !== userName) {
+                        typingUsers.push(childSnapshot.key);
+                    }
+                });
+                if (typingUsers.length > 0) {
+                    typingIndicator.innerHTML = `
+                        <div class="flex items-center">
+                            <div class="bg-gray-300 text-black p-3 rounded-lg max-w-xs md:max-w-md lg:max-w-lg">
+                                <div class="flex items-center">
+                                    <div class="typing-dots">
+                                        <div class="dot"></div>
+                                        <div class="dot"></div>
+                                        <div class="dot"></div>
+                                    </div>
+                                    <span class="ml-2">${typingUsers.join(', ')} ${typingMessage}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    typingIndicator.innerHTML = '';
+                }
+            });
+
+            window.addEventListener('online', () => {
+                goOnline(db);
+                offlineMessages.forEach(message => {
+                    push(ref(db, 'messages'), message);
+                });
+                offlineMessages = [];
+                localStorage.removeItem('offlineMessages');
+            });
+
+            window.addEventListener('offline', () => {
+                goOffline(db);
+            });
+
+            onDisconnect(ref(db, `typing/${userName}`)).set(false);
+            onDisconnect(ref(db, `status/${userName}`)).set('offline');
+
+            closeFullScreenButton.addEventListener('click', () => {
+                fullScreenModal.classList.add('hidden');
+            });
+
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+            });
+
+            closeSidebarButton.addEventListener('click', () => {
+                sidebar.classList.add('hidden');
+            });
+
+            emojiPicker.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    const emoji = e.target.textContent;
+                    const messageId = emojiPicker.getAttribute('data-id');
+                    const messageRef = ref(db, `messages/${messageId}/reactions/${emoji}`);
+                    onValue(messageRef, (snapshot) => {
+                        let users = snapshot.val() || [];
+                        if (!users.includes(userName)) {
+                            users.push(userName);
+                            set(messageRef, users);
+                        }
+                    });
+                    emojiPicker.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+    <style>
+        .typing-dots {
+            display: flex;
+            align-items: center;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            margin: 0 2px;
+            background-color: #000;
+            border-radius: 50%;
+            animation: blink 1.4s infinite both;
+        }
+        .dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes blink {
+            0%, 80%, 100% {
+                opacity: 0;
+            }
+            40% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-roboto">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div id="sidebar" class="bg-white w-64 p-4 shadow-lg hidden md:block">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Sidebar</h2>
+                <button id="close-sidebar-button" class="md:hidden bg-gray-200 p-2 rounded-full">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <ul>
+                <li class="mb-2 flex items-center">
+                    <label class="cursor-pointer" for="user-photo-input">
+                        <img id="user-photo" src="https://storage.googleapis.com/a1aa/image/CzhmbITo9g4FLt80TPzYV9k6y1qduSPYdyleT3zZPyQTdUDKA.jpg" alt="User photo placeholder" class="w-10 h-10 rounded-full mr-2" width="50" height="50">
+                        <input id="user-photo-input" type="file" class="hidden" accept="image/*">
+                    </label>
+                    <div class="flex flex-col">
+                        <input id="user-name-input" type="text" class="border p-1 rounded w-full" placeholder="Enter your name">
+                        <button id="save-user-name-button" class="bg-blue-500 text-white p-1 rounded mt-2">Save</button>
+                    </div>
+                </li>
+                <li class="mb-2 flex items-center">
+                    <label for="theme-toggle" class="text-blue-500">Theme</label>
+                    <select id="theme-toggle" class="ml-2 border p-1 rounded">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                    </select>
+                </li>
+                <li class="mb-2"><a href="#" class="text-blue-500">Link 3</a></li>
+                <li class="mb-2"><a href="#" class="text-blue-500">Link 4</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <div class="bg-white p-4 shadow-lg flex justify-between items-center">
+                <h1 class="text-xl font-bold">Chat</h1>
+                <button id="sidebar-toggle" class="md:hidden bg-gray-200 p-2 rounded-full">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="flex-1 p-4 overflow-y-auto">
+                <div id="message-list" class="h-96 overflow-y-auto mb-4">
+                    <!-- Messages will be dynamically added here -->
+                </div>
+                <div id="typing-indicator" class="text-gray-500 mb-2"></div>
+                <div class="flex items-center">
+                    <input id="message-input" type="text" class="flex-grow p-2 border rounded-l-lg" placeholder="Type your message...">
+                    <button id="send-button" class="bg-blue-500 text-white p-2 rounded-r-lg">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <button id="upload-button" class="bg-gray-200 p-2 rounded-full ml-2">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <input id="file-input" type="file" class="hidden" accept="image/*">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Screen Image Modal -->
+    <div id="full-screen-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-lg p-6 relative max-w-full max-h-full">
+            <button id="close-full-screen-button" class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full">
+                <i class="fas fa-times"></i>
+            </button>
