@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload and URL Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-4">Upload Video</h1>
+        <input type="file" id="videoInput" accept="video/*" class="mb-4 w-full p-2 border border-gray-300 rounded">
+        <button id="uploadButton" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">Upload Video</button>
+        <div id="videoURLContainer" class="mt-4 hidden">
+            <h2 class="text-xl font-semibold mb-2">Video URL</h2>
+            <input type="text" id="videoURL" readonly class="w-full p-2 border border-gray-300 rounded">
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            const videoInput = document.getElementById('videoInput');
+            if (videoInput.files.length === 0) {
+                alert('Please select a video file to upload.');
+                return;
+            }
+
+            const file = videoInput.files[0];
+            const videoURL = URL.createObjectURL(file);
+
+            const videoURLContainer = document.getElementById('videoURLContainer');
+            const videoURLInput = document.getElementById('videoURL');
+            videoURLInput.value = videoURL;
+            videoURLContainer.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
