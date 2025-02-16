@@ -1,13 +1,16 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bubble Chat App</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <script type="module">
-        // Import the functions you need from the SDKs you need
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Bubble Chat App
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+  <script type="module">
+   // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
         import { getDatabase, ref, push, onValue, set, onDisconnect, remove, update, goOffline, goOnline } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-messaging.js";
@@ -76,7 +79,6 @@
             const userPhoto = document.getElementById('user-photo');
             const userNameInput = document.getElementById('user-name-input');
             const saveUserNameButton = document.getElementById('save-user-name-button');
-            const themeToggle = document.getElementById('theme-toggle');
 
             let userName = localStorage.getItem('userName') || 'user1'; // Default user name
             let userPhotoURL = localStorage.getItem('userPhotoURL') || 'https://placehold.co/50x50';
@@ -170,12 +172,6 @@
                 userName = userNameInput.value.trim() || 'user1';
                 localStorage.setItem('userName', userName);
                 alert('User name saved!');
-            });
-
-            themeToggle.addEventListener('change', (e) => {
-                theme = e.target.value;
-                localStorage.setItem('theme', theme);
-                document.body.classList.toggle('dark', theme === 'dark');
             });
 
             onValue(ref(db, 'messages'), (snapshot) => {
@@ -320,9 +316,9 @@
                 }
             });
         });
-    </script>
-    <style>
-        .typing-dots {
+  </script>
+  <style>
+   .typing-dots {
             display: flex;
             align-items: center;
         }
@@ -351,71 +347,87 @@
                 opacity: 1;
             }
         }
-    </style>
-</head>
-<body class="bg-gray-100 font-roboto">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div id="sidebar" class="bg-white w-64 p-4 shadow-lg hidden md:block">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold">Sidebar</h2>
-                <button id="close-sidebar-button" class="md:hidden bg-gray-200 p-2 rounded-full">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <ul>
-                <li class="mb-2 flex items-center">
-                    <label class="cursor-pointer" for="user-photo-input">
-                        <img id="user-photo" src="https://storage.googleapis.com/a1aa/image/CzhmbITo9g4FLt80TPzYV9k6y1qduSPYdyleT3zZPyQTdUDKA.jpg" alt="User photo placeholder" class="w-10 h-10 rounded-full mr-2" width="50" height="50">
-                        <input id="user-photo-input" type="file" class="hidden" accept="image/*">
-                    </label>
-                    <div class="flex flex-col">
-                        <input id="user-name-input" type="text" class="border p-1 rounded w-full" placeholder="Enter your name">
-                        <button id="save-user-name-button" class="bg-blue-500 text-white p-1 rounded mt-2">Save</button>
-                    </div>
-                </li>
-                <li class="mb-2 flex items-center">
-                    <label for="theme-toggle" class="text-blue-500">Theme</label>
-                    <select id="theme-toggle" class="ml-2 border p-1 rounded">
-                        <option value="light">Light</option>
-                        <option value="dark">Dark</option>
-                    </select>
-                </li>
-                <li class="mb-2"><a href="#" class="text-blue-500">Link 3</a></li>
-                <li class="mb-2"><a href="#" class="text-blue-500">Link 4</a></li>
-            </ul>
-        </div>
-
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col">
-            <div class="bg-white p-4 shadow-lg flex justify-between items-center">
-                <h1 class="text-xl font-bold">Chat</h1>
-                <button id="sidebar-toggle" class="md:hidden bg-gray-200 p-2 rounded-full">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-            <div class="flex-1 p-4 overflow-y-auto">
-                <div id="message-list" class="h-96 overflow-y-auto mb-4">
-                    <!-- Messages will be dynamically added here -->
-                </div>
-                <div id="typing-indicator" class="text-gray-500 mb-2"></div>
-                <div class="flex items-center">
-                    <input id="message-input" type="text" class="flex-grow p-2 border rounded-l-lg" placeholder="Type your message...">
-                    <button id="send-button" class="bg-blue-500 text-white p-2 rounded-r-lg">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                    <button id="upload-button" class="bg-gray-200 p-2 rounded-full ml-2">
-                        <i class="fas fa-camera"></i>
-                    </button>
-                    <input id="file-input" type="file" class="hidden" accept="image/*">
-                </div>
-            </div>
-        </div>
+  </style>
+ </head>
+ <body class="bg-gray-100 font-roboto">
+  <div class="flex h-screen">
+   <!-- Sidebar -->
+   <div class="bg-white w-64 p-4 shadow-lg hidden md:block" id="sidebar">
+    <div class="flex justify-between items-center mb-4">
+     <h2 class="text-xl font-bold">
+      Sidebar
+     </h2>
+     <button class="md:hidden bg-gray-200 p-2 rounded-full" id="close-sidebar-button">
+      <i class="fas fa-times">
+      </i>
+     </button>
     </div>
-
-    <!-- Full Screen Image Modal -->
-    <div id="full-screen-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-lg shadow-lg p-6 relative max-w-full max-h-full">
-            <button id="close-full-screen-button" class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full">
-                <i class="fas fa-times"></i>
-            </button>
+    <ul>
+     <li class="mb-2 flex items-center">
+      <label class="cursor-pointer" for="user-photo-input">
+       <img alt="User photo placeholder" class="w-10 h-10 rounded-full mr-2" height="50" id="user-photo" src="https://storage.googleapis.com/a1aa/image/gaTNuzFWUwHCJEeIgLHQi5Z8W6ZuF3PENzp2MkvPcq0.jpg" width="50"/>
+       <input accept="image/*" class="hidden" id="user-photo-input" type="file"/>
+      </label>
+      <div class="flex flex-col">
+       <input class="border p-1 rounded w-full" id="user-name-input" placeholder="Enter your name" type="text"/>
+       <button class="bg-blue-500 text-white p-1 rounded mt-2" id="save-user-name-button">
+        Save
+       </button>
+      </div>
+     </li>
+     <li class="mb-2">
+      <a class="text-blue-500" href="#">
+       Link 3
+      </a>
+     </li>
+     <li class="mb-2">
+      <a class="text-blue-500" href="#">
+       Link 4
+      </a>
+     </li>
+    </ul>
+   </div>
+   <!-- Main Content -->
+   <div class="flex-1 flex flex-col">
+    <div class="bg-white p-4 shadow-lg flex justify-between items-center">
+     <h1 class="text-xl font-bold">
+      Chat
+     </h1>
+     <button class="md:hidden bg-gray-200 p-2 rounded-full" id="sidebar-toggle">
+      <i class="fas fa-bars">
+      </i>
+     </button>
+    </div>
+    <div class="flex-1 p-4 overflow-y-auto">
+     <div class="h-96 overflow-y-auto mb-4" id="message-list">
+      <!-- Messages will be dynamically added here -->
+     </div>
+     <div class="text-gray-500 mb-2" id="typing-indicator">
+     </div>
+     <div class="flex items-center">
+      <input class="flex-grow p-2 border rounded-l-lg" id="message-input" placeholder="Type your message..." type="text"/>
+      <button class="bg-blue-500 text-white p-2 rounded-r-lg" id="send-button">
+       <i class="fas fa-paper-plane">
+       </i>
+      </button>
+      <button class="bg-gray-200 p-2 rounded-full ml-2" id="upload-button">
+       <i class="fas fa-camera">
+       </i>
+      </button>
+      <input accept="image/*" class="hidden" id="file-input" type="file"/>
+     </div>
+    </div>
+   </div>
+  </div>
+  <!-- Full Screen Image Modal -->
+  <div class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden" id="full-screen-modal">
+   <div class="bg-white rounded-lg shadow-lg p-6 relative max-w-full max-h-full">
+    <button class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full" id="close-full-screen-button">
+     <i class="fas fa-times">
+     </i>
+    </button>
+    <img alt="Full screen view of the uploaded image" class="max-w-full max-h-full" height="600" id="full-screen-image" src="https://storage.googleapis.com/a1aa/image/UenfRJU6ObdvIK41ofCKF70730wKj8HdNgflVrJe_B0.jpg" width="800"/>
+   </div>
+  </div>
+ </body>
+</html>
